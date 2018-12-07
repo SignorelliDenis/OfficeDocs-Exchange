@@ -93,60 +93,61 @@ Since the hybrid customer base is very diverse, trying to fit all of them into "
   Get-ClientAccessServer | Set-ClientAccessServer -AutoDiscoverServiceInternalUri $Null
   ```
 
-    > [!NOTE]
-    > If you have Exchange 2007 servers in the environment, you will have to run a similar command on your Exchange 2007 servers to null out the settings. 
+   > [!NOTE]
+   > If you have Exchange 2007 servers in the environment, you will have to run a similar command on your Exchange 2007 servers to null out the settings. 
   
-4. There are inbound and outbound connectors created by the Hybrid Configuration Wizard that you will want to delete. Use the following steps to do this:
+- There are inbound and outbound connectors created by the Hybrid Configuration Wizard that you will want to delete. Use the following steps to do this:
     
-1. Log in to the [Office 365 Admin portal](http://portal.office.com) and sign in as the Tenant Administrator. 
+4. Log in to the [Office 365 Admin portal](http://portal.office.com) and sign in as the Tenant Administrator. 
     
-2. Select the option to manage **Exchange**.
+5. Select the option to manage **Exchange**.
     
-3. Navigate to **Mail Flow** -\> **Connection**.
+6. Navigate to **Mail Flow** -\> **Connection**.
     
-4. You can now disable or delete the inbound and outbound connectors. The HCW creates connectors with unique namespace **inbound from \<unique identifier\>** and **outbound from \<unique identifier\>** as shown in the graphic below. 
+7. You can now disable or delete the inbound and outbound connectors. The HCW creates connectors with unique namespace **inbound from \<unique identifier\>** and **outbound from \<unique identifier\>** as shown in the graphic below. 
     
     ![Hybrid Configuration Wizard creates connectors with unique namespace](media/7b1b6f0b-43d6-4407-8cd7-7dd52e016697.jpg)
   
-5. Remove the organization relationship created by the Hybrid Configuration Wizard. Use the following steps to do this:
+- Remove the organization relationship created by the Hybrid Configuration Wizard. Use the following steps to do this:
     
-1. Log in to the [Office 365 Admin portal](http://portal.office.com) and sign in as the Tenant Administrator. 
+8. Log in to the [Office 365 Admin portal](http://portal.office.com) and sign in as the Tenant Administrator. 
     
-2. Select the option to manage Exchange.
+9. Select the option to manage Exchange.
     
-3. Navigate to **Organization**.
+10. Navigate to **Organization**.
     
-4. Under **Organization Sharing**, remove the organization named **O365 to On-Premises - \<unique identifier\>** as shown in the graphic below. 
+11. Under **Organization Sharing**, remove the organization named **O365 to On-Premises - \<unique identifier\>** as shown in the graphic below. 
     
     ![Remove the Organization Relationship created by the Hybrid Configuration Wizard](media/2f0c1077-8785-487a-87a5-a75f0a4f0fea.jpg)
   
-6. If OAuth is configured for an Exchange hybrid deployment, you will want to disable the configuration from both on-premises and Office 365. In most environments, these steps can be skipped because only a small subset of our customers have OAuth configured. 
+- If OAuth is configured for an Exchange hybrid deployment, you will want to disable the configuration from both on-premises and Office 365. In most environments, these steps can be skipped because only a small subset of our customers have OAuth configured. 
     
-    To disable the on-premises configuration:
+   To disable the on-premises configuration:
     
-1. From an Exchange 2013 server, open the Exchange Management Shell.
+12. From an Exchange 2013 server, open the Exchange Management Shell.
     
-2. Run the following: 
+13. Run the following: 
     
   ```
   Get-IntraorganizationConnector -Identity ExchangeHybridOnPremisesToOnline | Set-IntraOrganizationConnector -Enabled $False
   ```
 
-    To disable the Exchange Online configuration:
+   To disable the Exchange Online configuration:
     
-1. Connect Windows PowerShell to Exchange Online.
+14. Connect Windows PowerShell to Exchange Online.
     
-2. Run the following: 
+15. Run the following: 
     
   ```
   Run Get-IntraorganizationConnector -Identity ExchangeHybridOnlineToOnPremises | Set-IntraOrganizationConnector -Enabled $False
   ```
 
-    The  _Identity_ parameter assumes that you used the Hybrid Configuration Wizard to configure OAuth. If this is not the case, you may need to adjust the value you specified for the identity of the connectors. 
+   > [!NOTE]
+   > The  _Identity_ parameter assumes that you used the Hybrid Configuration Wizard to configure OAuth. If this is not the case, you may need to adjust the value you specified for the identity of the connectors. 
     
-7. Disable directory synchronization for your tenants. When this step is completed, all user management tasks will be done from the Office 365 management tools. This means you will no longer use the Exchange Management Console or Exchange Administration Center (EAC). For more information on how to disable directory synchronization, see [Deactivate directory synchronization](https://technet.microsoft.com/en-us/library/dn144760.aspx).
+16. Disable directory synchronization for your tenants. When this step is completed, all user management tasks will be done from the Office 365 management tools. This means you will no longer use the Exchange Management Console or Exchange Administration Center (EAC). For more information on how to disable directory synchronization, see [Deactivate directory synchronization](https://technet.microsoft.com/en-us/library/dn144760.aspx).
     
-8. You can now safely uninstall Exchange from the on-premises servers.
+17. You can now safely uninstall Exchange from the on-premises servers.
     
 ### Scenario two
 
@@ -180,64 +181,63 @@ The graphic below describes the actual end state:
   Get-ClientAccessServer | Set-ClientAccessServer -AutoDiscoverServiceInternalUri $Null
   ```
 
-    > [!NOTE]
-    > If you have Exchange 2007 servers in the environment, you will have to run a similar command on your Exchange 2007 servers to null out the settings 
+   > [!NOTE]
+   > If you have Exchange 2007 servers in the environment, you will have to run a similar command on your Exchange 2007 servers to null out the settings 
   
 4. To prevent the hybrid configuration objects from being recreated in the future, you should remove the hybrid configuration object from Active Directory. To do this, open the Exchange Management Shell and run the following: 
     
   ```
   Remove-HybridConfiguration
-  
   ```
 
 5. Remove all Exchange servers with the exception of the servers you will retain for user management and creation. Two servers should be sufficient for user management, although you could possibly get by with one server. In addition, there is no need to have a Database Availability Group or any other high availability options. 
     
-6. If OAuth is configured for an Exchange hybrid deployment, you will want to disable the configuration from both on-premises and Office 365. In most environments, these steps can be skipped because only a small subset of our customers have OAuth configured. 
+- If OAuth is configured for an Exchange hybrid deployment, you will want to disable the configuration from both on-premises and Office 365. In most environments, these steps can be skipped because only a small subset of our customers have OAuth configured. 
     
-    To disable the on-premises configuration:
+   To disable the on-premises configuration:
     
-1. Open the Exchange Management Shell from an Exchange 2013 server.
+6. Open the Exchange Management Shell from an Exchange 2013 server.
     
-2. Run the following: 
+7. Run the following: 
     
   ```
   Get-IntraorganizationConnector -Identity ExchangeHybridOnPremisesToOnline | Set-IntraOrganizationConnector -Enabled $False
   ```
 
-    To disable the Exchange Online configuration:
+   To disable the Exchange Online configuration:
     
-1. Connect Windows PowerShell to Exchange Online.
+8. Connect Windows PowerShell to Exchange Online.
     
-2. Run the following: 
+9. Run the following: 
     
   ```
-  Run Get-IntraorganizationConnector -Identity ExchangeHybridOnlineToOnPremises | Set-IntraOrganizationConnector -Enabled $False
-  
+  Get-IntraorganizationConnector -Identity ExchangeHybridOnlineToOnPremises | Set-IntraOrganizationConnector -Enabled $False
   ```
 
-    The Identity parameter assumes that you used the Hybrid Configuration Wizard to configure OAuth. If this is not the case, you may need to adjust the value you specified for the identity of the connectors.
+   > [!NOTE]
+   > The Identity parameter assumes that you used the Hybrid Configuration Wizard to configure OAuth. If this is not the case, you may need to adjust the value you specified for the identity of the connectors.
     
-7. There are inbound and outbound connectors created by the Hybrid Configuration Wizard that you will want to delete. Use the following steps to do this:
+- There are inbound and outbound connectors created by the Hybrid Configuration Wizard that you will want to delete. Use the following steps to do this:
     
-1. Log in to the [Office 365 Admin portal](http://portal.office.com) and sign in as the Tenant Administrator. 
+10. Log in to the [Office 365 Admin portal](http://portal.office.com) and sign in as the Tenant Administrator. 
     
-2. Select the option to manage **Exchange**.
+11. Select the option to manage **Exchange**.
     
-3. Navigate to **Mail Flow** -\> **Connectors**.
+12. Navigate to **Mail Flow** -\> **Connectors**.
     
-4. You can now disable or delete the inbound and outbound connectors. The HCW creates connectors with unique namespace **inbound from \<unique identifier\>** and **outbound from \<unique identifier\>** as shown in the graphic below. 
+13. You can now disable or delete the inbound and outbound connectors. The HCW creates connectors with unique namespace **inbound from \<unique identifier\>** and **outbound from \<unique identifier\>** as shown in the graphic below. 
     
     ![Hybrid Configuration Wizard creates connectors with unique namespace](media/7b1b6f0b-43d6-4407-8cd7-7dd52e016697.jpg)
   
-8. Remove the organization relationship created by the Hybrid Configuration Wizard. Use the following steps to do this:
+- Remove the organization relationship created by the Hybrid Configuration Wizard. Use the following steps to do this:
     
-1. Log in to the [Office 365 Admin portal](http://portal.office.com) and sign in as the Tenant Administrator. 
+14. Log in to the [Office 365 Admin portal](http://portal.office.com) and sign in as the Tenant Administrator. 
     
-2. Select the option to manage **Exchange**.
+15. Select the option to manage **Exchange**.
     
-3. Navigate to **Organization**.
+16. Navigate to **Organization**.
     
-4. Under **Organization Sharing**, remove the organization named **O365 to On-Premises - \<unique identifier\>** as shown in the graphic below. 
+17. Under **Organization Sharing**, remove the organization named **O365 to On-Premises - \<unique identifier\>** as shown in the graphic below. 
     
     ![Remove the Organization Relationship created by the Hybrid Configuration Wizard](media/2f0c1077-8785-487a-87a5-a75f0a4f0fea.jpg)
   
