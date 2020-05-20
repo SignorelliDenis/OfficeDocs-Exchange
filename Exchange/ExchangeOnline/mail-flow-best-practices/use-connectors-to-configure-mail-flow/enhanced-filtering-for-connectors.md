@@ -105,6 +105,8 @@ Using the previous example, you would configure the IP address of the third-part
 
        - This option is only affective on the actual email address that you specify. For example, if a user has five email addresses associated with their mailbox (also known as _proxy addresses_), you'll need to specify all five of their email addresses here. Otherwise, messages that are sent to the four other email addresses will go through normal filtering.
 
+        - For hybrid environment which the inbound mail flow is through Exchange On-Premises, you'll need to specify the targetAddress of the MailUser object. E.g.: michelle@contoso.mail.onmicrosoft.com
+
    - **Apply to entire organization**: We recommend this option after you've tested the feature on a small number of recipients first.
 
 4. When you're finished, click **Save**.
@@ -127,11 +129,11 @@ Set-InboundConnector -Identity <ConnectorIdentity> [-EFSkipLastIP <$true | $fals
 
 - _EFSkipIPs_: The specific IP addresses to skip when the _EFSkipLastIP_ parameter value is `$false`. Valid values are:
 
-  - **A single IP address**: For example, `192.168.1.1`.
+  - **A single IP address**: For example, `40.108.128.1`.
 
-  - **An IP address range**: For example, `192.168.0.1-192.168.0.254`.
+  - **An IP address range**: For example, `40.108.128.0-40.108.128.31`.
 
-  - **Classless Inter-Domain Routing (CIDR) IP**: For example, `192.168.3.1/24`.
+  - **Classless Inter-Domain Routing (CIDR) IP**: For example, `40.108.128.1/27`.
 
 - _EFUsers_: The comma-separated email address of the recipients that you want to apply Enhanced Filtering for Connectors to. The default value is blank (`$null`), which means Enhanced Filtering for Connectors is applied to all recipients.
 
@@ -146,7 +148,7 @@ Set-InboundConnector -Identity "From Anti-spam Service" -EFSkipLastIP $true -EFU
 ```
 
 > [!IMPORTANT]
-> Entering the IP addresses of Office 365 is not supported. Do not use this feature to compensate for issues introduced by unsupported email routing paths. Use caution and limit the IP ranges to only the mail systems that will handle your own organization's messages prior to Office 365.
+> Entering IP addresses of Office 365 is not supported. Do not use this feature to compensate for issues introduced by unsupported email routing paths. Use caution and limit the IP ranges to only the mail systems that will handle your own organization's messages prior to Office 365. Entering private IP address is not supported as well. Enhanced Filtering automatically detect and skip private IP addresses.
 
 For detailed syntax and parameter information, see [Set-InboundConnector](https://docs.microsoft.com/powershell/module/exchange/mail-flow/set-inboundconnector)
 
